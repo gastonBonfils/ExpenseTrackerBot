@@ -37,7 +37,9 @@ We want to have a many to many relationship between the expense and category tab
     category_id: Integer, ForeignKey to Category table, not null
 """
 
-from sqlalchemy import Column, Integer, Float, String, Table, ForeignKey
+from datetime import datetime, timezone
+
+from sqlalchemy import Column, Integer, Float, String, Table, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from db.database import Base
 
@@ -68,6 +70,9 @@ class Expense(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     amount = Column(Float, nullable=False)
+    timestamp = Column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
+    )
     user_id = Column(Integer, ForeignKey("users.id"))
     comment = Column(String, nullable=True)
 
@@ -77,7 +82,7 @@ class Expense(Base):
     )
 
     def __repr__(self):
-        return f"<Expense(id={self.id}, amount={self.amount}, user_id={self.user_id}, comment={self.comment})>, categories={self.categories})"
+        return f"<Expense(id={self.id}, amount={self.amount}, user_id={self.user_id}, comment={self.comment}, categories={self.categories}) timestamp={self.timestamp})>"
 
 
 class Category(Base):

@@ -33,3 +33,6 @@ clean:
 
 run:
 	python -m bot.main
+
+terminal:
+	python -m terminal_ui.terminal_main
