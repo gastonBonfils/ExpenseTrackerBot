@@ -2,7 +2,7 @@
 import pytest
 
 from db.models import Expense, Category
-from db.services.categories import get_or_create_category
+from db.services.categories import get_or_create_category, get_category_list
 
 
 # category creation
@@ -40,3 +40,8 @@ def test_creating_multiple_categories(session):
 
     assert ret2.name == "Transport"
     assert ret2.id == 2
+
+
+def test_get_categories(session, sample_categories):
+    ret = get_category_list(session=session)
+    assert len(ret) == 2

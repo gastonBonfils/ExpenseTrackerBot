@@ -30,3 +30,19 @@ def get_or_create_category(
         session.commit()
 
     return category
+
+
+def get_category_list(
+    session: Session,
+) -> list[Category]:
+    """
+    Returns the list of categories currently existing
+    This function shall be used for giving the user the list of existing categories
+
+    args:
+        session: SQLAlchemy session
+    returns
+        catergory_list: list of Category
+    """
+    category_list = session.query(Category).all()
+    return category_list
