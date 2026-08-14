@@ -1,7 +1,10 @@
 # terminal_ui/terminal_main.py
+from datetime import datetime
 
+from db.models import Expense
 from db.database import SessionLocal, init_db
-from db.services.expenses import add_expense
+from db.services.expenses import add_expense, get_expenses
+from db.services.categories import get_category_list
 
 init_db()
 session = SessionLocal()
@@ -11,8 +14,17 @@ def print_options():
     a = """
     1. Add basic expense (15000, ["food"], user_id=1)
     2. Add custom expense
+    3. Get all expenses
     """
     print(a)
+
+
+def pretty_print_expense(expense: Expense):
+    category_names = [c.name for c in expense.categories]
+    short_date = expense.timestamp.strftime("%d/%m/%Y")
+    print(
+        f"$ {expense.amount} | {category_names} on {short_date} | {expense.user_id} | {expense.comment}"
+    )
 
 
 def add_basic_expense():
@@ -63,6 +75,12 @@ def add_custom_expense():
     print(exp)
 
 
+def get_all_expenses():
+    exp_list = get_expenses(session=session, user_id=1)
+    for e in exp_list:
+        pretty_print_expense(e)
+
+
 def main():
     while True:
         print_options()
@@ -72,6 +90,8 @@ def main():
             add_basic_expense()
         elif user_in == "2":
             add_custom_expense()
+        elif user_in == "3":
+            get_all_expenses()
 
 
 main()
