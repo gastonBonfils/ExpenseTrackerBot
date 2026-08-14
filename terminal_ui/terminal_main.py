@@ -27,6 +27,42 @@ def add_basic_expense():
         session.close()
 
 
+def add_custom_expense():
+    try:
+        amount = float(input("Amount: "))
+    except:
+        print("Could not turn amount into float")
+        return
+
+    categories = []
+    while True:
+        print("Write categories, leave empty when finished")
+        print(f"Current categories: {categories}")
+        category = input("Write category: ")
+        if category.strip() == "":
+            break
+
+        categories.append(category)
+
+    print(f"Chosen categories:  {categories}")
+
+    comment = input("Write a comment: ")
+    try:
+        user_id = int(input("User id: "))
+    except:
+        print("Could not parse user id")
+        return
+
+    exp = add_expense(
+        session=session,
+        amount=amount,
+        category_names=categories,
+        user_id=user_id,
+        comment=comment,
+    )
+    print(exp)
+
+
 def main():
     while True:
         print_options()
@@ -34,6 +70,8 @@ def main():
 
         if user_in == "1":
             add_basic_expense()
+        elif user_in == "2":
+            add_custom_expense()
 
 
 main()
